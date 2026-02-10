@@ -3,63 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will You Be My Valentine?🥺🥺, Abebekokooo!</title>
+    <title>Will You Be My Valentine? 🥺🥺</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #ffffff; /* White background */
-            color: #ff69b4; /* Pink text */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fff0f5; /* Lavender Blush for a softer look */
+            color: #ff69b4;
             text-align: center;
             padding: 50px;
+            overflow: hidden; /* Prevents scrollbars during button teleportation */
         }
         h1 {
-            color: #ff69b4;
+            color: #ff1493;
+            margin-bottom: 30px;
+        }
+        #buttonContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            height: 100px;
         }
         button {
-            background-color: #ff69b4; /* Pink buttons */
+            background-color: #ff69b4;
             color: white;
             border: none;
-            padding: 10px 20px;
-            margin: 10px;
-            font-size: 18px;
+            padding: 15px 30px;
+            font-size: 20px;
             cursor: pointer;
-            border-radius: 5px;
-            transition: all 0.3s ease; /* Smooth transition for hover */
+            border-radius: 50px;
+            transition: transform 0.2s, background-color 0.2s;
+            z-index: 10;
         }
         button:hover {
-            background-color: #ff1493; /* Darker pink on hover */
-            transform: scale(1.1); /* Scale up on hover */
+            background-color: #ff1493;
+            transform: scale(1.1);
         }
         #response {
             margin-top: 20px;
-            font-size: 24px;
+            font-size: 32px;
+            font-weight: bold;
         }
         #cat {
-            opacity: 0;
-            transform: scale(0.5);
-            width: 200px;
-            height: 200px;
+            display: none; /* Hidden by default */
+            width: 250px;
             margin: 20px auto;
-            transition: all 0.5s ease; /* Smooth zoom-in animation */
-        }
-        #cat.show {
-            opacity: 1;
-            transform: scale(1);
+            border-radius: 15px;
         }
         #pleas {
-            display: none;
-            color: #ff69b4;
+            margin-top: 15px;
+            font-style: italic;
+            font-size: 18px;
+            min-height: 1.5em;
         }
     </style>
 </head>
 <body>
-    <h1>Will You Be My Valentine?🥺🥺, Abebekooo!</h1>
-    <button id="yesBtn">Yes</button>
-    <button id="noBtn">No</button>
+
+    <h1>Will You Be My Valentine? 🥺🥺, Abebekooo!</h1>
+    
+    <div id="buttonContainer">
+        <button id="yesBtn">Yes</button>
+        <button id="noBtn">No</button>
+    </div>
     
     <div id="response"></div>
-    <img id="cat" src="file:///C:/Users/PC/Downloads/fast-cat-cat-excited.gif" alt="Dancing Cat">
     <div id="pleas"></div>
+    
+    <img id="cat" src="https://github.com/ChriisAbe/Abe/blob/main/excitedcat.gif" alt="Excited Cat">
+
+    <audio id="happyMusic" src="https://github.com/ChriisAbe/Abe/blob/main/happy.mp3" preload="auto"></audio>
+    <audio id="sadMusic" src="https://github.com/ChriisAbe/Abe/blob/main/sad.mp3" preload="auto"></audio>
 
     <script>
         const yesBtn = document.getElementById('yesBtn');
@@ -67,33 +81,49 @@
         const response = document.getElementById('response');
         const cat = document.getElementById('cat');
         const pleas = document.getElementById('pleas');
+        const happyMusic = document.getElementById('happyMusic');
+        const sadMusic = document.getElementById('sadMusic');
 
         let noCount = 0;
         const pleasMessages = [
-            "Please, Awww, babyy please, please please",
+            "Please, Awww, babyy please...",
             "Come on, Abebekokooo, say yes!",
-            "Pretty please with a cherry on top?",
+            "Pretty please with a cherry on top? 🍒",
             "I promise it'll be fun!",
-            "Don't break my heart, babyy!"
+            "Don't break my heart, babyy! 💔"
         ];
 
+        function teleportNoBtn() {
+            noBtn.style.position = 'absolute';
+            const maxX = window.innerWidth - noBtn.offsetWidth;
+            const maxY = window.innerHeight - noBtn.offsetHeight;
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
         yesBtn.addEventListener('click', () => {
-            response.textContent = "YEHEEYY!";
-            cat.classList.add('show'); // Add class to trigger zoom-in animation
+            response.textContent = "YEHEEYY! ❤️";
+            cat.style.display = 'block'; 
             pleas.style.display = 'none';
             yesBtn.style.display = 'none';
             noBtn.style.display = 'none';
+            
+            sadMusic.pause();
+            sadMusic.currentTime = 0;
+            happyMusic.play().catch(e => console.log("Audio play failed: ", e));
         });
 
         noBtn.addEventListener('click', () => {
+            pleas.textContent = pleasMessages[noCount % pleasMessages.length];
             noCount++;
-            if (noCount >= pleasMessages.length) {
-                noCount = 0; // Loop back to start
-            }
-            pleas.textContent = pleasMessages[noCount];
-            pleas.style.display = 'block';
-            response.textContent = "";
-            cat.classList.remove('show'); // Hide and reset animation
+            
+            happyMusic.pause();
+            happyMusic.currentTime = 0;
+            sadMusic.play().catch(e => console.log("Audio play failed: ", e));
+            
+            teleportNoBtn();
         });
     </script>
 </body>
